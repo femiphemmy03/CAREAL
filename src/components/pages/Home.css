@@ -1,0 +1,33 @@
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  text-align: center;
+  background-color: #f4f6f8;
+}
+
+.home-content h1 {
+  font-size: 2.2rem;
+  color: #0a2540;
+}
+
+.home-content p {
+  margin: 1rem 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.get-started-btn {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.get-started-btn:hover {
+  background-color: #0056b3;
+}
