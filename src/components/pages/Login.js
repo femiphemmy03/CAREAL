@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Pages.css";
 
-function Signup({ onSignup }) {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-  });
+
+function Login({ onLogin }) {
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -16,33 +12,32 @@ function Signup({ onSignup }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formData.fullName && formData.email && formData.password) {
-      onSignup();
-      alert("Account created successfully!");
+
+    // For now, mock authentication:
+    if (formData.email && formData.password) {
+      onLogin();
+      alert("Login successful!");
       navigate("/register");
     } else {
-      alert("Please fill all fields.");
+      alert("Please fill in both fields.");
     }
   };
 
   return (
     <div className="page-container">
-      <h2>Signup</h2>
+      <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        <label>Full Name:</label>
-        <input type="text" name="fullName" onChange={handleChange} required />
-
         <label>Email:</label>
         <input type="email" name="email" onChange={handleChange} required />
 
         <label>Password:</label>
         <input type="password" name="password" onChange={handleChange} required />
 
-        <button type="submit" className="submit-btn">Create Account</button>
+        <button type="submit" className="submit-btn">Login</button>
       </form>
-      <p>Already have an account? <span className="link" onClick={() => navigate("/login")}>Login</span></p>
+      <p>Don't have an account? <span className="link" onClick={() => navigate("/signup")}>Sign up</span></p>
     </div>
   );
 }
 
-export default Signup;
+export default Login;

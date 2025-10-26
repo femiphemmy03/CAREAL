@@ -1,28 +1,26 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import UserForm from "./components/UserForm";
+import Navbar from "./components/Header";
 import Home from "./components/pages/Home";
-import Services from "./components/pages/Services";
+import Signup from "./components/pages/Signup";
+import Login from "./components/pages/Login";
 import About from "./components/pages/About";
+import Services from "./components/pages/Services";
 import Contact from "./components/pages/Contact";
-import "./App.css";
+import UserForm from "./components/pages/UserForm"; // ✅ add this
 
 function App() {
-  const handleAuthSubmit = (formData, isLogin) => {
-    console.log(isLogin ? "Logging in..." : "Registering...", formData);
-    // Later: send to backend (Node/Firebase)
-  };
-
   return (
     <Router>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/services" element={<Services />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
+        <Route path="/services" element={<Services />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/auth" element={<UserForm onSubmit={handleAuthSubmit} />} />
+        <Route path="/user-form" element={<UserForm />} /> {/* ✅ new route */}
       </Routes>
     </Router>
   );
