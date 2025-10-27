@@ -7,7 +7,8 @@ function UserForm() {
     plateNumber: "",
   });
 
-  const [message, setMessage] = useState("");
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -15,19 +16,17 @@ function UserForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setResult(null);
+    setLoading(true);
 
     try {
-      // ✅ Use POST method and send JSON body
-      const response = await axios.post("http://localhost:5000/api/users", formData);
-
-      setMessage("✅ Frontend: Info submitted successfully!");
-      console.log("📨 Server Response:", response.data);
-
-      // Reset form
-      setFormData({ plateNumber: "" });
+      const response = await axios.post("/api/verifyplate", formData);
+      setResult(response.data);
     } catch (error) {
-      console.error("❌ Error submitting form:", error);
-      setMessage("❌ Failed to submit. Please try again.");
+      console.error("Error verifying plate number:", error);
+      setResult({ status: "ERROR", message: "Failed to verify plate number. Please try again." });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -35,21 +34,32 @@ function UserForm() {
     <div className="page-container">
       <h2>Enter Your Car Information</h2>
       <form onSubmit={handleSubmit}>
-        <label>Car Plate Number:</label>
+        <label htmlFor="plateNumber">Car Plate Number:</label>
         <input
           type="text"
+          id="plateNumber"
           name="plateNumber"
           value={formData.plateNumber}
           onChange={handleChange}
           required
         />
 
-        <button type="submit" className="submit-btn">
-          Submit
+        <button type="submit" className="submit-btn" disabled={loading}>
+          {loading ? "Verifying..." : "Submit"}
         </button>
       </form>
 
-      {message && <p className="response-message">{message}</p>}
+      {result && (
+        <div className="response-message">
+          <p><strong>Status:</strong> {result.message}</p>
+          {result.status === "VALID" && (
+            <>
+              <p><strong>Make:</strong> {result.make}</p>
+              <p><strong>Color:</strong> {result.color}</p>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
