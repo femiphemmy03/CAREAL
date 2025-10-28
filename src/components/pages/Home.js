@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
-import carGif from "../../assets/car.gif"; // Ensure this exists in src/assets/
+// import carGif from "../../assets/car.gif"; // Ensure this exists in src/assets/
+const carGif = `${process.env.PUBLIC_URL}/images/car-b5.gif`;
 
 function Home() {
   const navigate = useNavigate();

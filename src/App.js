@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Header";
+import Header from "./components/Header";
 import Home from "./components/pages/Home";
 import Signup from "./components/pages/Signup";
 import Login from "./components/pages/Login";
@@ -8,11 +8,13 @@ import About from "./components/pages/About";
 import Services from "./components/pages/Services";
 import Contact from "./components/pages/Contact";
 import UserForm from "./components/pages/UserForm"; // ✅ add this
+import './App.css';
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <Router>
-      <Navbar />
+      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
@@ -22,6 +24,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/user-form" element={<UserForm />} /> {/* ✅ new route */}
       </Routes>
+      <Footer/>
     </Router>
   );
 }

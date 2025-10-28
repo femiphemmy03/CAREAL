@@ -8,6 +8,7 @@ function Header() {
     <>  
         <div className="header">
             <img src={logo} alt="Careal logo" className = "logo-img" />
+            <h3>CarEal</h3>
             <Navbar />
         </div>
     </>
