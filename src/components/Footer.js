@@ -1,37 +1,16 @@
 import React from 'react';
 import './Footer.css';
-// import { Button } from './Button';
 import { Link } from 'react-router-dom';
 
 function Footer() {
+  const today = new Date();
   return (
     <div className='footer-container'>
-      <section className='footer-subscription'>
-        <p className='footer-subscription-heading'>
-          Join the Careal community to receive our best service deals
-        </p>
-        <p className='footer-subscription-text'>
-          You can unsubscribe at any time.
-        </p>
-        <div className='input-areas'>
-          <form>
-            <input
-              className='footer-input'
-              name='email'
-              type='email'
-              placeholder='Your Email'
-            />
-            <button buttonStyle='btn--outline'>Subscribe</button>
-          </form>
-        </div>
-      </section>
       <div class='footer-links'>
         <div className='footer-link-wrapper'>
           <div class='footer-link-items'>
             <h2>About Us</h2>
             <Link to='/sign-up'>How it works</Link>
-            <Link to='/'>Testimonials</Link>
-            <Link to='/'>Careers</Link>
             <Link to='/'>Investors</Link>
             <Link to='/'>Terms of Service</Link>
           </div>
@@ -39,25 +18,17 @@ function Footer() {
             <h2>Contact Us</h2>
             <Link to='/'>Contact</Link>
             <Link to='/'>Support</Link>
-            <Link to='/'>Destinations</Link>
             <Link to='/'>Sponsorships</Link>
           </div>
         </div>
         <div className='footer-link-wrapper'>
           <div class='footer-link-items'>
-            <h2>Videos</h2>
-            <Link to='/'>Submit Video</Link>
-            <Link to='/'>Ambassadors</Link>
-            <Link to='/'>Agency</Link>
-            <Link to='/'>Influencer</Link>
-          </div>
-          <div class='footer-link-items'>
             <h2>Social Media</h2>
             <Link to='https://www.linkedin.com/in/michaelbassey' target="_blank">Linkedin</Link>
-            <Link to='https://www.instagram.com/slick' target="_blank">Instagram</Link>
-            <Link to='https://www.facebook.com/mieleco' target="_blank">Facebook</Link>
-            <Link to='https://m.youtube.com/channel/UC1IF-GjAt9nsxhlYMAcCOtA' target="_blank">Youtube</Link>
-            <Link to='https://mobile.twitter.com/michaelbazze' target="_blank">Twitter</Link>
+            <Link to='https://www.instagram.com/devcareal/' target="_blank">Instagram</Link>
+            <Link to='https://www.facebook.com/profile.php?id=61582834841134' target="_blank">Facebook</Link>
+            <Link to='https://www.youtube.com/@Careal-h6t' target="_blank">Youtube</Link>
+            <Link to='https://x.com/devcareal?t=ELFC8K3qT8v2fI0_gzjvBg&s=09' target="_blank">Twitter</Link>
           </div>
         </div>
       </div>
@@ -77,6 +48,7 @@ function Footer() {
             </Link>
           </div>
           <small class='website-rights'>Careal © 2025</small>
+          <p>Copyright &copy; {today.getFullYear()}</p>
           <div class='social-icons'>
             <Link
               class='social-icon-link linkedin'
@@ -88,7 +60,7 @@ function Footer() {
             </Link>
             <Link
               class='social-icon-link instagram'
-              to='https://www.instagram.com/slicktechub'
+              to='https://www.instagram.com/devcareal/'
               target='_blank'
               aria-label='Instagram'
             >
@@ -96,7 +68,7 @@ function Footer() {
             </Link>
             <Link
               class='social-icon-link facebook'
-              to='https://www.facebook.com/mieleco'
+              to='https://www.facebook.com/profile.php?id=61582834841134'
               target='_blank'
               aria-label='Facebook' 
             >
@@ -105,7 +77,7 @@ function Footer() {
 
             <Link
               class='social-icon-link youtube'
-              to='https://m.youtube.com/channel/UC1IF-GjAt9nsxhlYMAcCOtA'
+              to='https://www.youtube.com/@Careal-h6t'
               target='_blank'
               aria-label='Youtube'
             >
@@ -114,7 +86,7 @@ function Footer() {
             
             <Link
               class='social-icon-link twitter'
-              to='https://mobile.twitter.com/michaelbazze'
+              to='https://x.com/devcareal?t=ELFC8K3qT8v2fI0_gzjvBg&s=09'
               target='_blank'
               aria-label='Twitter'
             >

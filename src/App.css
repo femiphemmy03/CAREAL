@@ -3,7 +3,7 @@ html{
   width: 100%;
   height: 100%;
   overflow-x: hidden; /* Prevent horizontal scrolling */
-  background-color: #000; /* Optional: set your default background */
+  /*background-color: #000; /* Optional: set your default background */
 }
 
 body {

@@ -8,8 +8,10 @@ import About from "./components/pages/About";
 import Services from "./components/pages/Services";
 import Contact from "./components/pages/Contact";
 import UserForm from "./components/pages/UserForm"; // ✅ add this
-import './App.css';
+import PaymentsDashboard from "./components/pages/PaymentsDashboard";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import Footer from "./components/Footer";
+import './App.css';
 
 function App() {
   return (
@@ -23,6 +25,7 @@ function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/user-form" element={<UserForm />} /> {/* ✅ new route */}
+        <Route path="/dashboard" element={<PaymentsDashboard />} />
       </Routes>
       <Footer/>
     </Router>
