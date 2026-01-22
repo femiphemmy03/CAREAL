@@ -11,9 +11,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ✅ PostgreSQL connection
+// ✅ PostgreSQL connection (Supabase with SSL)
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || "postgresql://postgres:yourpassword@localhost:5432/careal_db",
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+  ssl: {
+    rejectUnauthorized: false, // 👈 allows Supabase’s self-signed cert
+  },
 });
 
 // ✅ Ensure table exists
@@ -72,6 +79,7 @@ app.get("/api/payments", async (req, res) => {
   }
 });
 
+// ✅ Verify plate number
 app.post("/api/verifyplate", async (req, res) => {
   const { plateNumber } = req.body;
 
@@ -94,14 +102,9 @@ app.post("/api/verifyplate", async (req, res) => {
     res.status(500).json({ message: "Server error during verification." });
   }
 });
+
+// ✅ Root route
 app.get("/", (req, res) => res.send("🚗 CAREAL Backend Running Successfully!"));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
-
-
-
-
-
