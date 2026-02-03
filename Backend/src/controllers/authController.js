@@ -1,97 +1,87 @@
 // src/controllers/authController.js
-import { supabase } from '../lib/supabaseClient.js';  // adjust path
+import { supabase } from '../supabase.js';
+import bcrypt from 'bcryptjs';
+import { frscVerify } from '../utils/frscCheck.js';
 
+// SIGNUP with plate verification
 export const signup = async (req, res) => {
   const { firstName, otherName, lastName, email, password, plateNumber } = req.body;
 
-  if (!firstName || !lastName || !email || !password || !plateNumber) {
-    return res.status(400).json({
-      message: 'firstName, lastName, email, password, plateNumber are required',
-    });
-  }
-
   try {
-    // 1. Supabase auth signup (creates user in auth.users)
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
+    // 1. Verify plate number via FRSC
+    const result = await frscVerify(plateNumber.trim().toUpperCase());
+
+    if (result.status !== 'VALID') {
+      return res.status(400).json({
+        message: 'Plate number verification failed',
+        status: result.status,
+        details: result.message,
+      });
+    }
+
+    // 2. Hash password
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    // 3. Insert into vehicle_users (only your table, no Supabase Auth)
+    const { data, error } = await supabase
+      .from('vehicle_users')
+      .insert([
+        {
+          id: crypto.randomUUID(), // generate UUID yourself
           first_name: firstName,
           other_name: otherName || null,
           last_name: lastName,
-          plate_number: plateNumber,
+          email,
+          password_hash: passwordHash,
+          plate_number: plateNumber.toUpperCase(),
+          created_at: new Date().toISOString(),
         },
-      },
-    });
+      ])
+      .select()
+      .single();
 
-    if (authError) {
-      if (authError.message.includes('duplicate key')) {
-        return res.status(409).json({ message: 'Email already registered' });
-      }
-      throw authError;
+    if (error) {
+      return res.status(500).json({ message: error.message });
     }
 
-    if (!authData.user) {
-      return res.status(500).json({ message: 'Signup failed - no user returned' });
-    }
-
-    // 2. Optionally insert into your vehicle_users table if you want to keep it separate
-    // (but most people just use auth.users metadata for this in Supabase)
-    // If you keep vehicle_users, you can do:
-    // await supabase.from('vehicle_users').insert({...})
-
-    res.status(201).json({
+    return res.status(201).json({
       message: 'Account created successfully',
-      user: {
-        id: authData.user.id,
-        email: authData.user.email,
-        firstName,
-        lastName,
-        plateNumber,
+      user: data,
+      verifiedVehicle: {
+        make: result.make,
+        color: result.color,
       },
-      // Supabase returns session with access_token
-      token: authData.session?.access_token,
     });
   } catch (err) {
-    console.error('Signup error:', err);
-    res.status(500).json({ message: 'Server error during signup' });
+    return res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
 
+// LOGIN (manual check against vehicle_users table)
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password required' });
-  }
-
   try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { data: user, error } = await supabase
+      .from('vehicle_users')
+      .select('*')
+      .eq('email', email)
+      .single();
 
-    if (error) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+    if (error || !user) {
+      return res.status(400).json({ message: 'Invalid email or password' });
     }
 
-    // Get user metadata if stored in auth.users
-    const userMetadata = data.user?.user_metadata || {};
+    const validPassword = await bcrypt.compare(password, user.password_hash);
+    if (!validPassword) {
+      return res.status(400).json({ message: 'Invalid email or password' });
+    }
 
-    res.json({
+    return res.status(200).json({
       message: 'Login successful',
-      token: data.session.access_token,
-      user: {
-        id: data.user.id,
-        firstName: userMetadata.first_name,
-        lastName: userMetadata.last_name,
-        email: data.user.email,
-        plateNumber: userMetadata.plate_number,
-      },
+      user,
     });
   } catch (err) {
-    console.error('Login error:', err);
-    res.status(500).json({ message: 'Server error during login' });
+    return res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
