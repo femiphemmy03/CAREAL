@@ -1,7 +1,7 @@
 // src/controllers/authController.js
 import { supabase } from '../supabase.js';
 import bcrypt from 'bcryptjs';
-import { frscVerify } from '../utils/frscCheck.js';
+import { frscVerify } from   '../../utils/frscCheck.js'; 
 
 // SIGNUP with plate verification
 export const signup = async (req, res) => {
