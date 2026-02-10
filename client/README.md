@@ -1,67 +1,16 @@
-# CAREAL
+# React + Vite
 
-**Fast and Reliable Vehicle Document Renewal**
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
----
+Currently, two official plugins are available:
 
-## 🚀 Project Overview
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-CAREAL is an online platform designed to help vehicle owners renew their vehicle-related documents quickly and conveniently. Instead of visiting physical offices or navigating multiple websites, users can manage everything from one portal — from checking document status to making payments and tracking renewal progress.
+## React Compiler
 
-The MVP focuses on three core services:
-- Vehicle License Renewal
-- Insurance Renewal
-- Road Worthiness Renewal
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-Future phases may include:
-- New Vehicle Registration
-- Change of Ownership
-- Document Verification Services
+## Expanding the ESLint configuration
 
----
-
-## 🎯 MVP Objectives
-
-1. Check document status using vehicle registration number.
-2. Display expired or soon-to-expire documents.
-3. Enable seamless online renewal of selected documents.
-4. Integrate secure payment via **Flutterwave**.
-5. Provide a user dashboard to track renewal status (Pending, Done, Delivered).
-6. Include an Admin Panel for internal team management and service updates.
-
----
-
-## 👥 Target Users
-
-- Individual vehicle owners
-- Fleet owners managing multiple vehicles
-- Small logistics companies
-- Busy professionals who prefer online convenience
-
----
-
-## 🛠️ Tech Stack
-
-> _Internal Note Only_
-
-- **Frontend**: ReactJS
-- **Backend**: NodeJS
-- **Database**: PostgreSQL
-
----
-
-## 🎨 Brand Identity
-
-- **Primary Colors**: White background with purple accents
-
----
-
-## 📦 Getting Started
-
-To run the project locally:
-
-```bash
-git clone https://github.com/femiphemmy03/CAREAL.git
-cd CAREAL
-npm install
-npm start
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

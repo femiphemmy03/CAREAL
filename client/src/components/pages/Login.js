@@ -2,38 +2,47 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Pages.css";
 
-function Login({ onLogin }) {
-  const [formData, setFormData] = useState({ email: "", password: "" });
+
+function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    // For now, mock authentication:
-    if (formData.email && formData.password) {
-      onLogin();
-      alert("Login successful!");
-      navigate("/register");
-    } else {
-      alert("Please fill in both fields.");
+    try {
+      const res = await axios.post("http://localhost:5000/api/auth/login", {
+        email,
+        password,
+      });
+
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed");
     }
   };
 
   return (
     <div className="page-container">
       <h2>Login</h2>
+
+      {error && <p className="error">{error}</p>}
+
       <form onSubmit={handleSubmit}>
-        <label>Email:</label>
-        <input type="email" name="email" onChange={handleChange} required />
+        <label>Email</label>
+        <input type="email" onChange={(e) => setEmail(e.target.value)} required />
 
-        <label>Password:</label>
-        <input type="password" name="password" onChange={handleChange} required />
+        <label>Password</label>
+        <input type="password" onChange={(e) => setPassword(e.target.value)} required />
 
-        <button type="submit" className="submit-btn">Login</button>
+        <button className="submit-btn">Login</button>
       </form>
       <p>Don't have an account? <span className="link" onClick={() => navigate("/signup")}>Sign up</span></p>
     </div>
@@ -41,3 +50,4 @@ function Login({ onLogin }) {
 }
 
 export default Login;
+
