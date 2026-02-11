@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import pool from "../db.js";
+import pool from "../../../../Backend/db.js";
 
 const router = express.Router();
 

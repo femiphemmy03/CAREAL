@@ -1,14 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./Home.css";
-// import carGif from "../../assets/car.gif"; // Ensure this exists in src/assets/
-const carGif = `${process.env.PUBLIC_URL}/images/car-b5.gif`;
+import "./Home.css"; 
+import carGif from "../../assets/images/car-b5.gif"; 
 
 function Home() {
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
-    navigate("/user-form"); // Navigates to the UserForm page
+    navigate("/user-form"); 
   };
 
   return (
