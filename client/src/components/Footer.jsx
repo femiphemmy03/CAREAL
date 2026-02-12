@@ -1,6 +1,7 @@
 import React from 'react';
-import './Footer.css';
 import { Link } from 'react-router-dom';
+import img5 from "../assets/images/Careal-logo-2.png";
+import './Footer.css';
 
 function Footer() {
   const today = new Date();
@@ -37,18 +38,13 @@ function Footer() {
           <div class='footer-logo'>
             <Link to='/' className='social-logo'>
               Careal
-              <img
-                src={`${process.env.PUBLIC_URL}/images/img-5.jpg`}
-                alt="Careal logo"
-                style={{
+              <img src={img5} alt="Descriptive text" style={{
                   width: '30px',
-                  height: '30px',
-                  }}
+                  height: '30px',}}
               />
             </Link>
           </div>
-          <small class='website-rights'>Careal © 2025</small>
-          <p>Copyright &copy; {today.getFullYear()}</p>
+          <small class='website-rights'>Copyright &copy; {today.getFullYear()}</small>
           <div class='social-icons'>
             <Link
               class='social-icon-link linkedin'

@@ -29,6 +29,7 @@ function Signup() {
         "http://localhost:4000/api/auth/signup",
         formData
       );
+      console.log("Signup Successful:", res.data);
 
       // ✅ Save token (login user)
       localStorage.setItem("token", res.data.token);

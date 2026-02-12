@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 
 // 404 handler (optional but good practice)
 app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' });
+  res.status(404).json({ message: 'Route not found, try again' });
 });
 app.get('/api/profile', protect, async (req, res) => {
   const user = req.user;

@@ -1,72 +1,98 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "./Pages.css";
+import { useNavigate } from "react-router-dom";
 import "./PaymentsDashboard.css";
 
 const PaymentsDashboard = () => {
-  const [payments, setPayments] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchPayments();
-  }, []);
-
-  const fetchPayments = async () => {
-    try {
-      const response = await axios.get("http://localhost:4000/api/payments");
-      setPayments(response.data);
-    } catch (error) {
-      console.error("❌ Error fetching payments:", error);
-    } finally {
-      setLoading(false);
+    const loggedInUser = localStorage.getItem("user");
+    if (!loggedInUser) {
+      navigate("/login"); // No entry for unauthorized people!
+    } else {
+      setUser(JSON.parse(loggedInUser));
     }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/login");
   };
 
-  const totalRevenue = payments.reduce((sum, p) => sum + p.total, 0);
-
   return (
-    <div className="page-container">
-      <h2>Payments Dashboard</h2>
+    <div className="dashboard-container">
+      {/* Sidebar */}
+      <aside className="sidebar">
+        <div className="sidebar-logo">Careal</div>
+        <nav>
+          <ul>
+            <li className="active"><i className="fas fa-home"></i> Overview</li>
+            <li><i className="fas fa-car"></i> My Vehicles</li>
+            <li><i className="fas fa-credit-card"></i> Payments</li>
+            <li><i className="fas fa-user"></i> Profile</li>
+          </ul>
+        </nav>
+        <button onClick={handleLogout} className="logout-btn">
+          <i className="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </aside>
 
-      {loading ? (
-        <p>Loading payments...</p>
-      ) : payments.length === 0 ? (
-        <p>No payments recorded yet.</p>
-      ) : (
-        <>
-          <table className="data-table">
+      {/* Main Content */}
+      <main className="main-content">
+        <header className="dashboard-header">
+          <h2>Welcome back, {user?.username || "Chief"}!</h2>
+          <div className="user-profile-top">
+             <i className="fas fa-bell"></i>
+             <div className="avatar"> {user?.username?.charAt(0) || "U"} </div>
+          </div>
+        </header>
+
+        {/* Stats Cards */}
+        <div className="stats-grid">
+          <div className="stat-card">
+            <h3>Active Renewals</h3>
+            <p className="stat-number">3</p>
+          </div>
+          <div className="stat-card">
+            <h3>Pending Payments</h3>
+            <p className="stat-number">₦45,000</p>
+          </div>
+          <div className="stat-card">
+            <h3>Total Spent</h3>
+            <p className="stat-number">₦120,500</p>
+          </div>
+        </div>
+
+        {/* Recent Activity Table */}
+        <section className="recent-activity">
+          <h3>Recent Transactions</h3>
+          <table className="activity-table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Service</th>
-                <th>Base Price (₦)</th>
-                <th>Dev Fee (₦)</th>
-                <th>Charge (₦)</th>
-                <th>Total (₦)</th>
+                <th>Item</th>
                 <th>Date</th>
+                <th>Status</th>
+                <th>Amount</th>
               </tr>
             </thead>
             <tbody>
-              {payments.map((p) => (
-                <tr key={p.id}>
-                  <td>{p.id}</td>
-                  <td>{p.service_title}</td>
-                  <td>{p.base_price.toLocaleString()}</td>
-                  <td>{p.developer_fee.toLocaleString()}</td>
-                  <td>{p.payment_charge.toLocaleString()}</td>
-                  <td>{p.total.toLocaleString()}</td>
-                  <td>{new Date(p.created_at).toLocaleString()}</td>
-                </tr>
-              ))}
+              <tr>
+                <td>Car License - ABC-123XY</td>
+                <td>12 Feb 2026</td>
+                <td><span className="status-badge success">Completed</span></td>
+                <td>₦15,000</td>
+              </tr>
+              <tr>
+                <td>Insurance Renewal</td>
+                <td>10 Feb 2026</td>
+                <td><span className="status-badge pending">Pending</span></td>
+                <td>₦30,000</td>
+              </tr>
             </tbody>
           </table>
-
-          <div className="summary-box">
-            <p><strong>Total Payments:</strong> {payments.length}</p>
-            <p><strong>Total Revenue:</strong> ₦{totalRevenue.toLocaleString()}</p>
-          </div>
-        </>
-      )}
+        </section>
+      </main>
     </div>
   );
 };
