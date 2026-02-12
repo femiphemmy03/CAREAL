@@ -2,7 +2,7 @@
 export const signup = async (req, res) => {
     try {
         const { username, email, password } = req.body;
-        // This is where you talk to MongoDB/SQL
+        // This is where you talk to DB
         console.log("Signup data received:", req.body);
         res.status(201).json({ message: "User created successfully!" });
     } catch (error) {
