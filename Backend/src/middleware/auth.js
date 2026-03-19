@@ -1,27 +1,33 @@
 // src/middleware/auth.js
-import { supabase } from '../supabase.js';  // adjust path if needed (../supabase.js since it's in src/)
+import jwt from 'jsonwebtoken';
 
-export const protect = async (req, res, next) => {
-  // Expect token as "Bearer <token>"
+// In-memory blacklist for revoked tokens (for demo; use Redis/DB in production)
+const tokenBlacklist = new Set();
+
+export const protect = (req, res, next) => {
   const authHeader = req.headers.authorization;
-
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'No token provided - authorization header missing or invalid' });
+  if (!authHeader?.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'No token provided' });
   }
 
   const token = authHeader.split(' ')[1];
 
+  // Check if token is blacklisted
+  if (tokenBlacklist.has(token)) {
+    return res.status(401).json({ message: 'Token revoked' });
+  }
+
   try {
-    const { data: { user }, error } = await supabase.auth.getUser(token);
-
-    if (error || !user) {
-      return res.status(401).json({ message: 'Invalid or expired token' });
-    }
-
-    req.user = user;  // Attach authenticated user to request
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // { id, email, role, ... }
     next();
   } catch (err) {
-    console.error('Auth middleware error:', err.message);
-    res.status(401).json({ message: 'Authentication failed' });
+    console.error('JWT verify error:', err.message);
+    return res.status(401).json({ message: 'Invalid or expired token' });
   }
+};
+
+// Utility to revoke tokens (e.g., on logout)
+export const revokeToken = (token) => {
+  tokenBlacklist.add(token);
 };
